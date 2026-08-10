@@ -53,4 +53,19 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    public function recalculateProgress(): void
+    {
+        $totalTasks = $this->tasks()->count();
+
+        if ($totalTasks === 0) {
+            $this->update(['completion_percentage' => 0]);
+            return;
+        }
+
+        $completedTasks = $this->tasks()->where('status', 'completed')->count();
+        $percentage = (int) round(($completedTasks / $totalTasks) * 100);
+
+        $this->update(['completion_percentage' => $percentage]);
+    }
 }

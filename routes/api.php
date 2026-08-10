@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\ProjectController;
+use App\Http\Controllers\Api\Manager\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -21,6 +22,11 @@ Route::prefix('v1')->group(function () {
             Route::apiResource('projects', ProjectController::class);
             Route::post('/projects/{project}/members', [ProjectController::class, 'addMember']);
             Route::delete('/projects/{project}/members/{user}', [ProjectController::class, 'removeMember']);
+        });
+
+        // Project Manager-only routes
+        Route::middleware('role:project_manager')->prefix('manager')->group(function () {
+            Route::apiResource('tasks', TaskController::class);
         });
     });
 
