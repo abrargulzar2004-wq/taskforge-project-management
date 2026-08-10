@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Admin\UserController;
+use App\Http\Controllers\Api\Admin\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -17,6 +18,9 @@ Route::prefix('v1')->group(function () {
         // Admin-only routes
         Route::middleware('role:admin')->prefix('admin')->group(function () {
             Route::apiResource('users', UserController::class);
+            Route::apiResource('projects', ProjectController::class);
+            Route::post('/projects/{project}/members', [ProjectController::class, 'addMember']);
+            Route::delete('/projects/{project}/members/{user}', [ProjectController::class, 'removeMember']);
         });
     });
 
