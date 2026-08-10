@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
+use App\Notifications\TaskAssignedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -91,6 +93,11 @@ class TaskController extends Controller
 
         $project->recalculateProgress();
 
+        if ($task->assigned_to) {
+            $assignee = User::find($task->assigned_to);
+            $assignee->notify(new TaskAssignedNotification($task));
+        }
+
         ActivityLog::create([
             'user_id' => $request->user()->id,
             'subject_type' => Task::class,
@@ -145,6 +152,8 @@ class TaskController extends Controller
             ], 422);
         }
 
+        $previousAssignee = $task->assigned_to;
+
         $data = $request->only([
             'title', 'description', 'assigned_to', 'priority',
             'status', 'estimated_hours', 'start_date', 'due_date',
@@ -158,6 +167,11 @@ class TaskController extends Controller
 
         $task->update($data);
         $task->project->recalculateProgress();
+
+        if (isset($data['assigned_to']) && $data['assigned_to'] != $previousAssignee) {
+            $assignee = User::find($data['assigned_to']);
+            $assignee->notify(new TaskAssignedNotification($task));
+        }
 
         ActivityLog::create([
             'user_id' => $request->user()->id,
