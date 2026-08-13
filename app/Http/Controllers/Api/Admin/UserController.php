@@ -8,13 +8,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class UserController extends Controller
 {
     /**
      * List all users, with search + filter + pagination.
      */
-    public function index(Request $request)
+    private function buildFilterQuery(Request $request)
     {
         $query = User::query();
 
@@ -34,9 +36,62 @@ class UserController extends Controller
             $query->where('status', $request->status);
         }
 
-        $users = $query->orderBy('created_at', 'desc')->paginate(15);
+        return $query;
+    }
 
+    /**
+     * List all users, with search + filter + pagination.
+     */
+    public function index(Request $request)
+    {
+        $query = $this->buildFilterQuery($request);
+        $users = $query->orderBy('created_at', 'desc')->paginate(15);
         return response()->json($users, 200);
+    }
+
+    /**
+     * Export users as CSV or PDF.
+     */
+    public function export(Request $request)
+    {
+        if (!$request->has('format') || !in_array($request->format, ['csv', 'pdf'])) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => ['format' => ['The format parameter is required and must be either csv or pdf.']]
+            ], 422);
+        }
+
+        $query = $this->buildFilterQuery($request);
+        $users = $query->orderBy('created_at', 'desc')->get();
+
+        if ($request->format === 'csv') {
+            $response = new StreamedResponse(function() use ($users) {
+                $handle = fopen('php://output', 'w');
+                fputcsv($handle, ['ID', 'Name', 'Email', 'Role', 'Status', 'Created At']);
+                
+                foreach ($users as $user) {
+                    fputcsv($handle, [
+                        $user->id,
+                        $user->name,
+                        $user->email,
+                        $user->role,
+                        $user->status,
+                        $user->created_at->toDateTimeString()
+                    ]);
+                }
+                
+                fclose($handle);
+            });
+
+            $response->headers->set('Content-Type', 'text/csv');
+            $response->headers->set('Content-Disposition', 'attachment; filename="users_export.csv"');
+
+            return $response;
+        }
+
+        // PDF Format
+        $pdf = Pdf::loadView('exports.users-pdf', ['users' => $users]);
+        return $pdf->download('users_export.pdf');
     }
 
     /**

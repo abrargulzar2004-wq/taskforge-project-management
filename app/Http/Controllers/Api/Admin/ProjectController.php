@@ -9,13 +9,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProjectController extends Controller
 {
     /**
      * List all projects, with search + filter + pagination.
      */
-    public function index(Request $request)
+    private function buildFilterQuery(Request $request)
     {
         $query = Project::with(['manager', 'creator']);
 
@@ -39,9 +41,65 @@ class ProjectController extends Controller
             $query->where('project_manager_id', $request->manager_id);
         }
 
-        $projects = $query->orderBy('created_at', 'desc')->paginate(15);
+        return $query;
+    }
 
+    /**
+     * List all projects, with search + filter + pagination.
+     */
+    public function index(Request $request)
+    {
+        $query = $this->buildFilterQuery($request);
+        $projects = $query->orderBy('created_at', 'desc')->paginate(15);
         return response()->json($projects, 200);
+    }
+
+    /**
+     * Export projects as CSV or PDF.
+     */
+    public function export(Request $request)
+    {
+        if (!$request->has('format') || !in_array($request->format, ['csv', 'pdf'])) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => ['format' => ['The format parameter is required and must be either csv or pdf.']]
+            ], 422);
+        }
+
+        $query = $this->buildFilterQuery($request);
+        $projects = $query->orderBy('created_at', 'desc')->get();
+
+        if ($request->format === 'csv') {
+            $response = new StreamedResponse(function() use ($projects) {
+                $handle = fopen('php://output', 'w');
+                fputcsv($handle, ['ID', 'Code', 'Name', 'Status', 'Priority', 'Manager', 'Created By', 'Start Date', 'End Date']);
+                
+                foreach ($projects as $project) {
+                    fputcsv($handle, [
+                        $project->id,
+                        $project->project_code,
+                        $project->name,
+                        $project->status,
+                        $project->priority,
+                        $project->manager ? $project->manager->name : '',
+                        $project->creator ? $project->creator->name : '',
+                        $project->start_date,
+                        $project->end_date
+                    ]);
+                }
+                
+                fclose($handle);
+            });
+
+            $response->headers->set('Content-Type', 'text/csv');
+            $response->headers->set('Content-Disposition', 'attachment; filename="projects_export.csv"');
+
+            return $response;
+        }
+
+        // PDF Format
+        $pdf = Pdf::loadView('exports.projects-pdf', ['projects' => $projects]);
+        return $pdf->download('projects_export.pdf');
     }
 
     /**

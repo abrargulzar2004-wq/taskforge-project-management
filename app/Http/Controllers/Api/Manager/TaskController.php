@@ -10,13 +10,15 @@ use App\Models\User;
 use App\Notifications\TaskAssignedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TaskController extends Controller
 {
     /**
      * List tasks for a project the manager owns (or all their tasks if no project given).
      */
-    public function index(Request $request)
+    private function buildFilterQuery(Request $request)
     {
         $user = $request->user();
 
@@ -41,9 +43,64 @@ class TaskController extends Controller
             $query->where('assigned_to', $request->assigned_to);
         }
 
-        $tasks = $query->orderBy('due_date', 'asc')->paginate(15);
+        return $query;
+    }
 
+    /**
+     * List tasks for a project the manager owns (or all their tasks if no project given).
+     */
+    public function index(Request $request)
+    {
+        $query = $this->buildFilterQuery($request);
+        $tasks = $query->orderBy('due_date', 'asc')->paginate(15);
         return response()->json($tasks, 200);
+    }
+
+    /**
+     * Export tasks as CSV or PDF.
+     */
+    public function export(Request $request)
+    {
+        if (!$request->has('format') || !in_array($request->format, ['csv', 'pdf'])) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => ['format' => ['The format parameter is required and must be either csv or pdf.']]
+            ], 422);
+        }
+
+        $query = $this->buildFilterQuery($request);
+        $tasks = $query->orderBy('due_date', 'asc')->get();
+
+        if ($request->format === 'csv') {
+            $response = new StreamedResponse(function() use ($tasks) {
+                $handle = fopen('php://output', 'w');
+                fputcsv($handle, ['ID', 'Title', 'Project', 'Assignee', 'Status', 'Priority', 'Start Date', 'Due Date']);
+                
+                foreach ($tasks as $task) {
+                    fputcsv($handle, [
+                        $task->id,
+                        $task->title,
+                        $task->project ? $task->project->name : '',
+                        $task->assignee ? $task->assignee->name : 'Unassigned',
+                        $task->status,
+                        $task->priority,
+                        $task->start_date,
+                        $task->due_date
+                    ]);
+                }
+                
+                fclose($handle);
+            });
+
+            $response->headers->set('Content-Type', 'text/csv');
+            $response->headers->set('Content-Disposition', 'attachment; filename="tasks_export.csv"');
+
+            return $response;
+        }
+
+        // PDF Format
+        $pdf = Pdf::loadView('exports.tasks-pdf', ['tasks' => $tasks]);
+        return $pdf->download('tasks_export.pdf');
     }
 
     /**
