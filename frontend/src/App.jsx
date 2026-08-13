@@ -12,8 +12,7 @@ import AdminUsers from './pages/admin/AdminUsers';
 import AdminProjects from './pages/admin/AdminProjects';
 
 const AdminProjectDetails = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Project Details Placeholder — built next</div>;
-const AdminReports = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Reports Placeholder</div>;
-
+import AdminReports from './pages/admin/AdminReports';
 // Placeholders for Group 3 (Manager)
 const ManagerDashboard = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Dashboard Placeholder</div>;
 const ManagerProjects = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Projects Placeholder</div>;
@@ -25,10 +24,17 @@ const MemberDashboard = () => <div className="p-4 bg-white rounded-xl shadow-sm 
 const MemberTasks = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Member Tasks Placeholder</div>;
 
 // Placeholders for Group 5 (Shared)
-const Calendar = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Calendar Placeholder</div>;
-const Profile = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Profile Placeholder</div>;
-const Notifications = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Notifications Placeholder</div>;
-
+const Calendar = () => (
+    <div className="p-8 bg-white rounded-xl shadow-sm border border-slate-200 text-center">
+        <p className="text-slate-400 text-sm font-medium">📅 Calendar — Coming Soon</p>
+    </div>
+);
+import Profile from './pages/Profile';
+const Notifications = () => (
+    <div className="p-8 bg-white rounded-xl shadow-sm border border-slate-200 text-center">
+        <p className="text-slate-400 text-sm font-medium">🔔 Notifications — Coming Soon</p>
+    </div>
+);
 const App = () => {
     return (
         <AuthProvider>
