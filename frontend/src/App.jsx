@@ -24,11 +24,7 @@ const MemberDashboard = () => <div className="p-4 bg-white rounded-xl shadow-sm 
 const MemberTasks = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Member Tasks Placeholder</div>;
 
 // Placeholders for Group 5 (Shared)
-const Calendar = () => (
-    <div className="p-8 bg-white rounded-xl shadow-sm border border-slate-200 text-center">
-        <p className="text-slate-400 text-sm font-medium">📅 Calendar — Coming Soon</p>
-    </div>
-);
+import Calendar from './pages/Calendar';
 import Profile from './pages/Profile';
 import Notifications from './pages/Notifications';
 const App = () => {
