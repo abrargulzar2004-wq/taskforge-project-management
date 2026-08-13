@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\CalendarController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Api\Manager\ReportController as ManagerReportController;
+use App\Http\Controllers\Api\Manager\ProjectController as ManagerProjectController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -31,6 +34,15 @@ Route::prefix('v1')->group(function () {
         // Phase 9 Shared Routes
         Route::get('/calendar/events', [CalendarController::class, 'events']);
         Route::get('/search', [SearchController::class, 'index']);
+
+        // Phase 11 Shared Routes (Notifications & Profile)
+        Route::get('/notifications', [NotificationController::class, 'index']);
+        Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+        Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+        
+        Route::get('/profile', [ProfileController::class, 'show']);
+        Route::put('/profile', [ProfileController::class, 'update']);
+        Route::patch('/profile/password', [ProfileController::class, 'updatePassword']);
 
         // Phase 9 Dashboard Routes (Role specific, un-prefixed)
         Route::middleware('role:admin')->get('/dashboard/admin', [DashboardController::class, 'admin']);
@@ -58,6 +70,7 @@ Route::prefix('v1')->group(function () {
         // Project Manager-only routes
         Route::middleware('role:project_manager')->prefix('manager')->group(function () {
             Route::get('/reports', [ManagerReportController::class, 'index']);
+            Route::get('/projects', [ManagerProjectController::class, 'index']);
             Route::get('/tasks/export', [TaskController::class, 'export']);
             Route::apiResource('tasks', TaskController::class);
         });
