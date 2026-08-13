@@ -1,122 +1,87 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Layout from './components/Layout';
+import Login from './pages/Login';
+import Unauthorized from './pages/Unauthorized';
+import NotFound from './pages/NotFound';
 
-function App() {
-  const [count, setCount] = useState(0)
+// Placeholders for Group 2 (Admin)
+const AdminDashboard = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Dashboard Placeholder</div>;
+const AdminUsers = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Users Placeholder</div>;
+const AdminProjects = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Projects Placeholder</div>;
+const AdminReports = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Reports Placeholder</div>;
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+// Placeholders for Group 3 (Manager)
+const ManagerDashboard = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Dashboard Placeholder</div>;
+const ManagerProjects = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Projects Placeholder</div>;
+const ManagerTasks = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Tasks Placeholder</div>;
+const ManagerReports = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Reports Placeholder</div>;
 
-      <div className="ticks"></div>
+// Placeholders for Group 4 (Member)
+const MemberDashboard = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Member Dashboard Placeholder</div>;
+const MemberTasks = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Member Tasks Placeholder</div>;
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+// Placeholders for Group 5 (Shared)
+const Calendar = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Calendar Placeholder</div>;
+const Profile = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Profile Placeholder</div>;
+const Notifications = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Notifications Placeholder</div>;
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+const App = () => {
+    return (
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    {/* Public Routes */}
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/unauthorized" element={<Unauthorized />} />
+                    
+                    {/* Root Redirect */}
+                    <Route path="/" element={<Navigate to="/login" replace />} />
 
-export default App
+                    {/* Authenticated Routes with Layout */}
+                    <Route element={<ProtectedRoute />}>
+                        <Route element={<Layout />}>
+                            {/* Shared Routes */}
+                            <Route path="/calendar" element={<Calendar />} />
+                            <Route path="/profile" element={<Profile />} />
+                            <Route path="/notifications" element={<Notifications />} />
+
+                            {/* Admin Routes */}
+                            <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                                <Route path="/admin/users" element={<AdminUsers />} />
+                                <Route path="/admin/projects" element={<AdminProjects />} />
+                                <Route path="/admin/projects/:id" element={<AdminProjects />} />
+                                <Route path="/admin/reports" element={<AdminReports />} />
+                            </Route>
+
+                            {/* Manager Routes */}
+                            <Route element={<ProtectedRoute allowedRoles={['project_manager']} />}>
+                                <Route path="/manager/dashboard" element={<ManagerDashboard />} />
+                                <Route path="/manager/projects" element={<ManagerProjects />} />
+                                <Route path="/manager/projects/:id" element={<ManagerProjects />} />
+                                <Route path="/manager/tasks" element={<ManagerTasks />} />
+                                <Route path="/manager/tasks/:id" element={<ManagerTasks />} />
+                                <Route path="/manager/reports" element={<ManagerReports />} />
+                            </Route>
+
+                            {/* Member Routes */}
+                            <Route element={<ProtectedRoute allowedRoles={['team_member']} />}>
+                                <Route path="/member/dashboard" element={<MemberDashboard />} />
+                                <Route path="/member/tasks" element={<MemberTasks />} />
+                                <Route path="/member/tasks/:id" element={<MemberTasks />} />
+                            </Route>
+                        </Route>
+                    </Route>
+
+                    {/* 404 Route */}
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
+    );
+};
+
+export default App;
