@@ -30,11 +30,7 @@ const Calendar = () => (
     </div>
 );
 import Profile from './pages/Profile';
-const Notifications = () => (
-    <div className="p-8 bg-white rounded-xl shadow-sm border border-slate-200 text-center">
-        <p className="text-slate-400 text-sm font-medium">🔔 Notifications — Coming Soon</p>
-    </div>
-);
+import Notifications from './pages/Notifications';
 const App = () => {
     return (
         <AuthProvider>
