@@ -16,7 +16,7 @@ class ProjectController extends Controller
         $query = Project::with(['manager', 'creator'])
             ->where('project_manager_id', $request->user()->id);
 
-        if ($request->has('search') && $request->search !== '') {
+        if ($request->has('search') && $request->search !== '' && $request->search !== 'undefined' && $request->search !== 'null') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
@@ -24,11 +24,11 @@ class ProjectController extends Controller
             });
         }
 
-        if ($request->has('status') && $request->status !== '') {
+        if ($request->has('status') && $request->status !== '' && $request->status !== 'undefined' && $request->status !== 'null') {
             $query->where('status', $request->status);
         }
 
-        if ($request->has('priority') && $request->priority !== '') {
+        if ($request->has('priority') && $request->priority !== '' && $request->priority !== 'undefined' && $request->priority !== 'null') {
             $query->where('priority', $request->priority);
         }
 

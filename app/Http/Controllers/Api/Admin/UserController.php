@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         $query = User::query();
 
-        if ($request->has('search') && $request->search !== '') {
+        if ($request->has('search') && $request->search !== '' && $request->search !== 'undefined' && $request->search !== 'null') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
@@ -28,11 +28,11 @@ class UserController extends Controller
             });
         }
 
-        if ($request->has('role') && $request->role !== '') {
+        if ($request->has('role') && $request->role !== '' && $request->role !== 'undefined' && $request->role !== 'null') {
             $query->where('role', $request->role);
         }
 
-        if ($request->has('status') && $request->status !== '') {
+        if ($request->has('status') && $request->status !== '' && $request->status !== 'undefined' && $request->status !== 'null') {
             $query->where('status', $request->status);
         }
 

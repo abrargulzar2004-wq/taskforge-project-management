@@ -21,25 +21,25 @@ class ProjectController extends Controller
     {
         $query = Project::with(['manager', 'creator']);
 
-        if ($request->has('search') && $request->search !== '') {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('project_code', 'like', '%' . $search . '%');
-            });
-        }
+        if ($request->filled('search') && $request->search !== 'undefined' && $request->search !== 'null') {
+    $search = $request->search;
+    $query->where(function ($q) use ($search) {
+        $q->where('name', 'like', '%' . $search . '%')
+          ->orWhere('project_code', 'like', '%' . $search . '%');
+    });
+}
 
-        if ($request->has('status') && $request->status !== '') {
-            $query->where('status', $request->status);
-        }
+if ($request->filled('status') && $request->status !== 'undefined' && $request->status !== 'null') {
+    $query->where('status', $request->status);
+}
 
-        if ($request->has('priority') && $request->priority !== '') {
-            $query->where('priority', $request->priority);
-        }
+if ($request->filled('priority') && $request->priority !== 'undefined' && $request->priority !== 'null') {
+    $query->where('priority', $request->priority);
+}
 
-        if ($request->has('manager_id') && $request->manager_id !== '') {
-            $query->where('project_manager_id', $request->manager_id);
-        }
+if ($request->filled('manager_id') && $request->manager_id !== 'undefined' && $request->manager_id !== 'null') {
+    $query->where('project_manager_id', $request->manager_id);
+}
 
         return $query;
     }

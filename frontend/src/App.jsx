@@ -7,10 +7,11 @@ import Login from './pages/Login';
 import Unauthorized from './pages/Unauthorized';
 import NotFound from './pages/NotFound';
 
-// Placeholders for Group 2 (Admin)
-const AdminDashboard = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Dashboard Placeholder</div>;
-const AdminUsers = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Users Placeholder</div>;
-const AdminProjects = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Projects Placeholder</div>;
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminProjects from './pages/admin/AdminProjects';
+
+const AdminProjectDetails = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Project Details Placeholder — built next</div>;
 const AdminReports = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Reports Placeholder</div>;
 
 // Placeholders for Group 3 (Manager)
@@ -36,7 +37,7 @@ const App = () => {
                     {/* Public Routes */}
                     <Route path="/login" element={<Login />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
-                    
+
                     {/* Root Redirect */}
                     <Route path="/" element={<Navigate to="/login" replace />} />
 
@@ -53,7 +54,7 @@ const App = () => {
                                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
                                 <Route path="/admin/users" element={<AdminUsers />} />
                                 <Route path="/admin/projects" element={<AdminProjects />} />
-                                <Route path="/admin/projects/:id" element={<AdminProjects />} />
+                                <Route path="/admin/projects/:id" element={<AdminProjectDetails />} />
                                 <Route path="/admin/reports" element={<AdminReports />} />
                             </Route>
 

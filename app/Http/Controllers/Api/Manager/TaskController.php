@@ -27,15 +27,15 @@ class TaskController extends Controller
                 $q->where('project_manager_id', $user->id);
             });
 
-        if ($request->has('project_id') && $request->project_id !== '') {
+        if ($request->has('project_id') && $request->project_id !== '' && $request->project_id !== 'undefined' && $request->project_id !== 'null') {
             $query->where('project_id', $request->project_id);
         }
 
-        if ($request->has('status') && $request->status !== '') {
+        if ($request->has('status') && $request->status !== '' && $request->status !== 'undefined' && $request->status !== 'null') {
             $query->where('status', $request->status);
         }
 
-        if ($request->has('priority') && $request->priority !== '') {
+        if ($request->has('priority') && $request->priority !== '' && $request->priority !== 'undefined' && $request->priority !== 'null') {
             $query->where('priority', $request->priority);
         }
 
