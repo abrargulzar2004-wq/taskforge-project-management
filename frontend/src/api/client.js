@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const client = axios.create({
-    baseURL: 'http://127.0.0.1:8001/api/v1', // Port 8001 since artisan serve is running on 8001
+    baseURL: '/api/v1', // Relative path — works on localhost AND on Render live site
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
