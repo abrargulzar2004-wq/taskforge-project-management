@@ -1,59 +1,129 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# TaskForge — Project Management & Team Collaboration Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+TaskForge is a full-stack Project Management & Team Collaboration platform built for organizations to plan projects, assign tasks, manage teams, and track progress from a single system. It simulates real-world software used by companies to manage projects and collaborate across teams, with role-based access control across three dedicated portals.
 
-## About Laravel
+**Live Demo:** https://taskforge-project-management.onrender.com/
+**Repository:** https://github.com/abrargulzar2004-wq/taskforge-project-management
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend:** Laravel (PHP), REST API, Sanctum authentication
+- **Frontend:** React, Vite, Tailwind CSS
+- **Database:** MySQL
+- **Deployment:** Render (backend + frontend), GitHub-integrated CI
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Portals & Roles
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🛡️ Administrator Portal
+- Full control over the system
+- Create, update, and manage users
+- Create, update, and manage projects
+- Assign a Project Manager to each project
+- Assign/remove team members on any project
+- Monitor all projects and progress
+- View system-wide reports and analytics
 
-## Laravel Sponsors
+### 📋 Project Manager Portal
+- View and manage only assigned projects
+- Add or remove team members from assigned projects
+- Create and assign tasks to team members
+- Set task priority and deadlines
+- Monitor task and project progress
+- View task discussions and project updates
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### ✅ Team Member Portal
+- View assigned projects and tasks
+- Update task status (To Do → In Progress → Review → Completed)
+- Participate in task discussions
+- View notifications
+- Manage personal profile
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Core Features
 
-## Contributing
+- **Authentication & Authorization** — Sanctum-based auth with role-based route protection (`admin`, `project_manager`, `team_member`)
+- **Project Management** — name, description, dates, priority, status, assigned manager & members, progress tracking
+- **Task Management** — title, description, assignee, priority, due date, status lifecycle
+- **Task Discussion** — per-task comment thread for Project Managers and assigned Team Members
+- **Notifications** — task assignment, status changes, new discussion messages, upcoming deadlines
+- **Dashboards** — role-specific metrics (active projects, pending/overdue tasks, completion %, upcoming deadlines)
+- **Calendar View** — visualize deadlines and due dates by month
+- **Reports** — project/task/productivity reporting with CSV and PDF export (Admin)
+- **Search, Filter & Sort** — across users, projects, and tasks
+- **Activity Log** — tracks key actions (project created, member assigned, etc.)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## Project Structure
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+taskforge-project-management/
+├── app/
+│   ├── Http/Controllers/Api/
+│   │   ├── Admin/          # Admin-only controllers (Users, Projects, Reports)
+│   │   ├── Manager/        # Project Manager controllers (Projects, Tasks, Reports)
+│   │   ├── Member/         # Team Member controllers (Tasks)
+│   │   └── ...             # Shared controllers (Auth, Notifications, Profile, Comments)
+│   └── Models/              # Eloquent models (User, Project, Task, etc.)
+├── database/                # Migrations, seeders, factories
+├── routes/api.php           # Versioned API routes (/api/v1/...)
+├── frontend/
+│   ├── src/
+│   │   ├── pages/           # Role-based pages (admin/, manager/, member/)
+│   │   ├── components/      # Shared UI components
+│   │   └── index.css        # Tailwind v4 theme
+│   └── vite.config.js
+└── docker/                  # Deployment configuration
+```
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Getting Started (Local Setup)
 
-## License
+### Backend
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+git clone https://github.com/abrargulzar2004-wq/taskforge-project-management.git
+cd taskforge-project-management
+composer install
+cp .env.example .env
+php artisan key:generate
+# configure your database in .env
+php artisan migrate --seed
+php artisan serve
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## API Overview
+
+All endpoints are prefixed with `/api/v1`.
+
+| Group | Example Endpoints |
+|---|---|
+| Auth | `POST /login`, `POST /logout`, `GET /me` |
+| Admin | `/admin/users`, `/admin/projects`, `/admin/projects/{id}/members` |
+| Manager | `/manager/projects`, `/manager/tasks`, `/manager/reports` |
+| Member | `/member/tasks`, `/member/tasks/{id}/status` |
+| Shared | `/tasks/{id}/comments`, `/notifications`, `/calendar/events`, `/profile` |
+
+Access to each group is enforced via role middleware (`role:admin`, `role:project_manager`, `role:team_member`).
+
+---
+
+## Author
+
+Built by Abrar Gulzar as a full-stack internship project demonstrating system architecture, authentication, role-based access control, and real-world SaaS application design.
