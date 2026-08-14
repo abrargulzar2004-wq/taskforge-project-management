@@ -14,7 +14,7 @@ import AdminProjects from './pages/admin/AdminProjects';
 const AdminProjectDetails = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Project Details Placeholder — built next</div>;
 import AdminReports from './pages/admin/AdminReports';
 // Placeholders for Group 3 (Manager)
-const ManagerDashboard = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Dashboard Placeholder</div>;
+import ManagerDashboard from './pages/manager/ManagerDashboard';
 const ManagerProjects = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Projects Placeholder</div>;
 const ManagerTasks = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Tasks Placeholder</div>;
 const ManagerReports = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Reports Placeholder</div>;
