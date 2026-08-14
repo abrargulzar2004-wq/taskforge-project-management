@@ -67,10 +67,11 @@ Route::prefix('v1')->group(function () {
             Route::delete('/projects/{project}/members/{user}', [ProjectController::class, 'removeMember']);
         });
 
-        // Project Manager-only routes
+      // Project Manager-only routes
         Route::middleware('role:project_manager')->prefix('manager')->group(function () {
             Route::get('/reports', [ManagerReportController::class, 'index']);
             Route::get('/projects', [ManagerProjectController::class, 'index']);
+            Route::get('/projects/{project}', [ManagerProjectController::class, 'show']);
             Route::get('/tasks/export', [TaskController::class, 'export']);
             Route::apiResource('tasks', TaskController::class);
         });

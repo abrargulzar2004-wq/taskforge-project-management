@@ -33,7 +33,22 @@ class ProjectController extends Controller
         }
 
         $projects = $query->orderBy('created_at', 'desc')->paginate(15);
-
         return response()->json($projects, 200);
+    }
+
+    /**
+     * Show a single project (with team members) that belongs to the logged-in manager.
+     */
+    public function show(Request $request, Project $project)
+    {
+        if ($project->project_manager_id !== $request->user()->id) {
+            return response()->json([
+                'message' => 'You do not have permission to view this project.',
+            ], 403);
+        }
+
+        return response()->json([
+            'project' => $project->load(['manager', 'creator', 'members']),
+        ], 200);
     }
 }
