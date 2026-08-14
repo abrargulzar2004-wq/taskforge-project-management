@@ -20,7 +20,7 @@ import ManagerTasks from './pages/manager/ManagerTasks';
 const ManagerReports = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Reports Placeholder</div>;
 
 // Placeholders for Group 4 (Member)
-const MemberDashboard = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Member Dashboard Placeholder</div>;
+import MemberDashboard from './pages/member/MemberDashboard';
 const MemberTasks = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Member Tasks Placeholder</div>;
 
 // Placeholders for Group 5 (Shared)
