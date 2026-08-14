@@ -13,16 +13,15 @@ import AdminProjects from './pages/admin/AdminProjects';
 
 const AdminProjectDetails = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Admin Project Details Placeholder — built next</div>;
 import AdminReports from './pages/admin/AdminReports';
+import TaskDetail from './pages/shared/TaskDetail';
 // Placeholders for Group 3 (Manager)
 import ManagerDashboard from './pages/manager/ManagerDashboard';
 import ManagerProjects from './pages/manager/ManagerProjects';
 import ManagerTasks from './pages/manager/ManagerTasks';
-const ManagerReports = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Manager Reports Placeholder</div>;
-
+import ManagerReports from './pages/manager/ManagerReports';
 // Placeholders for Group 4 (Member)
 import MemberDashboard from './pages/member/MemberDashboard';
-const MemberTasks = () => <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-200">Member Tasks Placeholder</div>;
-
+import MemberTasks from './pages/member/MemberTasks';
 // Placeholders for Group 5 (Shared)
 import Calendar from './pages/Calendar';
 import Profile from './pages/Profile';
@@ -62,7 +61,7 @@ const App = () => {
                                 <Route path="/manager/projects" element={<ManagerProjects />} />
                                 <Route path="/manager/projects/:id" element={<ManagerProjects />} />
                                 <Route path="/manager/tasks" element={<ManagerTasks />} />
-                                <Route path="/manager/tasks/:id" element={<ManagerTasks />} />
+                                <Route path="/manager/tasks/:id" element={<TaskDetail />} />
                                 <Route path="/manager/reports" element={<ManagerReports />} />
                             </Route>
 
@@ -70,7 +69,7 @@ const App = () => {
                             <Route element={<ProtectedRoute allowedRoles={['team_member']} />}>
                                 <Route path="/member/dashboard" element={<MemberDashboard />} />
                                 <Route path="/member/tasks" element={<MemberTasks />} />
-                                <Route path="/member/tasks/:id" element={<MemberTasks />} />
+                                <Route path="/member/tasks/:id" element={<TaskDetail />} />
                             </Route>
                         </Route>
                     </Route>
